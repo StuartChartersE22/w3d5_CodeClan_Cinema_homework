@@ -44,6 +44,13 @@ class Film
     return Customer.map_customers(customers)
   end
 
+  def number_of_audience_members()
+    sql = "SELECT COUNT(*) FROM tickets
+      WHERE tickets.film_id = $1"
+    values = [@id]
+    return SqlRunner.run(sql, values)[0]["count"].to_i()
+  end
+
 #Sql class methods
 
   def self.map_films(films)

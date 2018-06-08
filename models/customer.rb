@@ -65,7 +65,7 @@ class Customer
     update()
   end
 
-  def number_of_tickets_bought()
+  def number_of_tickets()
     sql = "SELECT COUNT(*) FROM tickets
       WHERE tickets.customer_id = $1"
     values = [@id]
