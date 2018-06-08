@@ -22,7 +22,7 @@ class Customer
     (name, wallet)
     VALUES
     ($1, $2)
-    RETURnING id"
+    RETURNING id"
     values = [@name, @wallet]
     @id = SqlRunner.run(sql, values)[0]["id"]
   end
@@ -45,7 +45,24 @@ class Customer
     values = [@id]
     films = SqlRunner.run(sql, values)
     return Film.map_films(films)
-    end
+  end
+
+  def buy_ticket(film_id)
+    sql = "SELECT films.price FROM films
+      WHERE films.id = $1"
+    values = [film_id]
+    film_price = SqlRunner.run(sql, values)[0]["price"].to_i()
+
+    return if wallet < film_price
+
+    remove_cash(film_price)
+    ticket = Ticket.new({
+      "customer_id" => @id,
+      "film_id" => film_id
+      })
+    ticket.save()
+    update()
+  end
 
 #Sql class methods
   def self.map_customers(customers)
