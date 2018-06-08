@@ -73,6 +73,12 @@ class Customer
     return SqlRunner.run(sql, values)[0]["count"].to_i()
   end
 
+  def delete()
+    sql = "DELETE FROM customers WHERE customers.id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
 #Sql class methods
   def self.map_customers(customers)
     return customers.map {|customer| Customer.new(customer)}
@@ -87,6 +93,13 @@ class Customer
   def self.delete_all()
     sql ="DELETE FROM customers"
     SqlRunner.run(sql)
+  end
+
+  def self.find(id)
+    sql = "SELECT * FROM customers WHERE id = $1"
+    values = [id]
+    customer = SqlRunner.run(sql, values)
+    return Customer.new(customer[0])
   end
 
 end

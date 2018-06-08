@@ -52,6 +52,12 @@ class Film
     return SqlRunner.run(sql, values)[0]["count"].to_i()
   end
 
+  def delete()
+    sql = "DELETE FROM films WHERE films.id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
 #Sql class methods
 
   def self.map_films(films)
@@ -67,6 +73,13 @@ class Film
   def self.delete_all()
     sql ="DELETE FROM films"
     SqlRunner.run(sql)
+  end
+
+  def self.find(id)
+    sql = "SELECT * FROM films WHERE id = $1"
+    values = [id]
+    film = SqlRunner.run(sql, values)
+    return Film.new(film[0])
   end
 
 end

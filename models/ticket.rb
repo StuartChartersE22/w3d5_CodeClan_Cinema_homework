@@ -10,6 +10,8 @@ class Ticket
     @screening_id = details["screening_id"].to_i()
   end
 
+#SQL instance methods
+
   def save()
     sql = "INSERT INTO tickets
     (customer_id, screening_id)
@@ -29,6 +31,25 @@ class Ticket
     values = [@customer_id, @screening_id, @id]
     SqlRunner.run(sql, values)
   end
+
+  def price()
+    sql = "SELECT films.price FROM films
+    INNER JOIN screenings ON screenings.film_id = films.id
+    WHERE screenings.id = $1"
+    values = [@screening_id]
+    return SqlRunner.run(sql, values)[0]["price"].to_i()
+  end
+
+  def cancel()
+    sql = "DELETE FROM tickets WHERE tickets.id = $1"
+    values = [@id]
+    customer = Customer.find(@customer_id)
+    customer.remove_cash(-price)
+    customer.update()
+    SqlRunner.run(sql, values)
+  end
+
+#SQL class methods
 
   def self.map_tickets(tickets)
     return tickets.map {|ticket| Ticket.new(ticket)}
