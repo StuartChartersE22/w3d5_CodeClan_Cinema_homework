@@ -4,6 +4,8 @@ require_relative("../db/sql_runner_cinema.rb")
 
 class Ticket
 
+  attr_reader(:customer_id, :screening_id)
+
   def initialize(details)
     @id = details["id"].to_i() if details["id"]
     @customer_id = details["customer_id"].to_i()
@@ -41,12 +43,11 @@ class Ticket
   end
 
   def cancel()
-    sql = "DELETE FROM tickets WHERE tickets.id = $1"
+    sql = "DELETE FROM tickets
+    WHERE tickets.id = $1"
     values = [@id]
-    customer = Customer.find(@customer_id)
-    customer.remove_cash(-price)
-    customer.update()
     SqlRunner.run(sql, values)
+    Customer.refund_tickets([self])
   end
 
 #SQL class methods
@@ -64,6 +65,16 @@ class Ticket
   def self.delete_all()
     sql ="DELETE FROM tickets"
     SqlRunner.run(sql)
+  end
+
+  def self.cancel_showing(id_screening)
+    sql = "DELETE FROM tickets
+    WHERE screening_id = $1
+    RETURNING *"
+    values = [id_screening]
+    ticket_details = SqlRunner.run(sql, values)
+    tickets = self.map_tickets(ticket_details)
+    Customer.refund_tickets(tickets)
   end
 
 end

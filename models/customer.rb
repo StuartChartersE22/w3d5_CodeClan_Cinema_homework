@@ -102,4 +102,12 @@ class Customer
     return Customer.new(customer[0])
   end
 
+  def self.refund_tickets(array_of_tickets)
+    array_of_tickets.each do |ticket|
+      customer = self.find(ticket.customer_id)
+      customer.remove_cash(-ticket.price())
+      customer.update()
+    end
+  end
+
 end

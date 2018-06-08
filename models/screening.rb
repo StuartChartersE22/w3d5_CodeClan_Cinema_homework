@@ -44,9 +44,26 @@ class Screening
   end
 
   def delete()
-    sql = "DELETE FROM screenings WHERE screenings.id = $1"
+    sql = "DELETE FROM screenings
+    WHERE screenings.id = $1"
     values = [@id]
     SqlRunner.run(sql, values)
+  end
+
+  def tickets()
+    sql = "SELECT * FROM tickets
+    WHERE tickets.screening_id = $1"
+    values = [@id]
+    tickets = SqlRunner.run(sql, values)
+    return Ticket.map_tickets(tickets)
+  end
+
+  def cancel()
+    Ticket.cancel_showing(@id)
+    sql = "DELETE FROM screenings
+    WHERE screenings.id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values).values().flatten()
   end
 
 #SQL class methods
