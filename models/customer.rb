@@ -10,6 +10,12 @@ class Customer
     @wallet = details["wallet"].to_i()
   end
 
+# Pure Ruby methods
+  def remove_cash(amount)
+    @wallet -= amount
+  end
+
+# Sql instance methods
   def save()
     sql = "INSERT INTO customers
     (name, wallet)
@@ -20,6 +26,17 @@ class Customer
     @id = SqlRunner.run(sql, values)[0]["id"]
   end
 
+  def update()
+    sql = "UPDATE customers
+    SET
+    (name, wallet) = ($1, $2)
+    WHERE
+    customers.id = $3"
+    values = [@name, @wallet, @id]
+    SqlRunner.run(sql, values)
+  end
+
+#Sql class methods
   def self.map_customers(customers)
     return customers.map {|customer| Customer.new(customer)}
   end
