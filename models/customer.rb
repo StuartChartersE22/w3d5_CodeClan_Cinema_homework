@@ -1,5 +1,6 @@
 require_relative("../db/sql_runner_cinema.rb")
 require_relative("./film.rb")
+require_relative("./ticket.rb")
 
 class Customer
 
@@ -62,6 +63,14 @@ class Customer
       })
     ticket.save()
     update()
+  end
+
+  def number_of_tickets_bought()
+    sql = "SELECT id FROM tickets
+      WHERE tickets.customer_id = $1"
+    values = [@id]
+    ticket_ids = SqlRunner.run(sql, values).values()
+    return ticket_ids.length()
   end
 
 #Sql class methods
