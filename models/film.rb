@@ -36,9 +36,10 @@ class Film
 
   def audience()
     sql = "SELECT customers.* FROM films
-    INNER JOIN tickets ON tickets.film_id = films.id
+    INNER JOIN screenings ON screenings.film_id = films.id
+    INNER JOIN tickets ON tickets.screening_id = screenings.id
     INNER JOIN customers ON tickets.customer_id = customers.id
-    WHERE tickets.film_id = $1"
+    WHERE screenings.film_id = $1"
     values = [@id]
     customers = SqlRunner.run(sql, values)
     return Customer.map_customers(customers)
@@ -46,7 +47,7 @@ class Film
 
   def number_of_audience_members()
     sql = "SELECT COUNT(*) FROM tickets
-      WHERE tickets.film_id = $1"
+      WHERE tickets.screening_id = $1"
     values = [@id]
     return SqlRunner.run(sql, values)[0]["count"].to_i()
   end
