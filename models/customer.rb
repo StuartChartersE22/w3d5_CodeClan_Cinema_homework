@@ -10,4 +10,14 @@ class Customer
     @wallet = details["wallet"].to_i()
   end
 
+  def save()
+    sql = "INSERT INTO customers
+    (name, wallet)
+    VALUES
+    ($1, $2)
+    RETURnING id"
+    values = [@name, @wallet]
+    @id = SqlRunner.run(sql, values)[0]["id"]
+  end
+
 end
