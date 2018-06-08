@@ -1,4 +1,5 @@
 require_relative("../db/sql_runner_cinema.rb")
+require_relative("./customer.rb")
 
 class Film
 
@@ -10,6 +11,8 @@ class Film
     @name = details["name"]
     @price = details["price"].to_i()
   end
+
+#Sql instance methods
 
   def save()
     sql = "INSERT INTO films
@@ -30,6 +33,18 @@ class Film
     values = [@name, @price, @id]
     SqlRunner.run(sql, values)
   end
+
+  def audience()
+    sql = "SELECT customers.* FROM films
+    INNER JOIN tickets ON tickets.film_id = films.id
+    INNER JOIN customers ON tickets.customer_id = customers.id
+    WHERE tickets.film_id = $1"
+    values = [@id]
+    customers = SqlRunner.run(sql, values)
+    return Customer.map_customers(customers)
+  end
+
+#Sql class methods
 
   def self.map_films(films)
     return films.map {|film| Film.new(film)}

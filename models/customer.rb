@@ -1,4 +1,5 @@
 require_relative("../db/sql_runner_cinema.rb")
+require_relative("./film.rb")
 
 class Customer
 
