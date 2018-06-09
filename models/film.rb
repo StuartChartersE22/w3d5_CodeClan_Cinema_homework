@@ -52,6 +52,12 @@ class Film
     return SqlRunner.run(sql, values)[0]["count"].to_i()
   end
 
+  def delete()
+    sql = "DELETE FROM films WHERE films.id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
   def cancel()
     customers = find_all_customers_and_the_price()
     Customer.refund_tickets(customers)

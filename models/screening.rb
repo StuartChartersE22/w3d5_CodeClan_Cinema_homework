@@ -4,8 +4,8 @@ require_relative("./change_time.rb")
 
 class Screening
 
-  attr_reader(:id, :film_id, :capacity)
-  attr_accessor(:show_time)
+  attr_reader(:id, :film_id)
+  attr_accessor(:show_time, :capacity)
 
   def initialize(details)
     @id = details["id"].to_i() if details["id"]
