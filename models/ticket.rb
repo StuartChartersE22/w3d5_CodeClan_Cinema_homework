@@ -94,12 +94,14 @@ class Ticket
   # end
 
   def self.ticket_prices_by_screening_for_customers(screening_id)
-    sql = "SELECT tickets.customer_id, films.price FROM films
+    sql = "SELECT customers.*, films.price FROM films
     INNER JOIN screenings ON screenings.film_id = films.id
     INNER JOIN tickets ON tickets.screening_id = screenings.id
+    INNER JOIN customers ON tickets.customer_id = customers.id
     WHERE screening_id = $1"
     values = [screening_id]
-    return results = SqlRunner.run(sql, values)
+    results = SqlRunner.run(sql, values)
+    return results.map {|result| {Customer.map_customers(result) => result["price"].to_i()}}
   end
 
 end

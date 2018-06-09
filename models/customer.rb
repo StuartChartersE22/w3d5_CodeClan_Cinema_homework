@@ -102,7 +102,15 @@ class Customer
     return Customer.new(customer[0])
   end
 
-  def self.refund_tickets(array_of_hash_customer_id_to_price_paid)
+  def self.find_customers(array_of_ids)
+    sql = "SELECT * FROM customers WHERE id IN $1"
+    values = [array_of_ids]
+    customers = SqlRunner.run(sql, values)
+    return self.map_customers(customers)
+  end
+
+  def self.refund_tickets(array_of_hash_customer_to_price_paid)
+    SqlRunner.run(sql, values)
     array_of_hash_customer_id_to_price_paid.each do |entry|
       customer = self.find(entry["customer_id"])
       customer.remove_cash(-(entry["price"].to_i()))
