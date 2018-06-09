@@ -18,7 +18,8 @@ CREATE TABLE films(
 CREATE TABLE screenings(
   id SERIAL4 PRIMARY KEY,
   film_id INT4 REFERENCES films(id) NOT NULL,
-  show_time TIME(0)
+  show_time TIME(0),
+  capacity INT2
 );
 
 CREATE TABLE tickets(

@@ -49,19 +49,24 @@ class Customer
     return Film.map_films(films)
   end
 
-  def buy_ticket(film_id)
-    sql = "SELECT films.price FROM films
-      WHERE films.id = $1"
-    values = [film_id]
-    film_price = SqlRunner.run(sql, values)[0]["price"].to_i()
+  def buy_ticket(screening_id)
+    sql = "SELECT films.price, screenings.capacity, COUNT(tickets.id) FROM screenings
+      INNER JOIN films ON films.id = screenings.film_id
+      INNER JOIN tickets ON tickets.screening_id = screenings.id
+      WHERE screenings.id = $1 GROUP BY (films.price, screenings.capacity)"
+    values = [screening_id]
+    details = SqlRunner.run(sql, values)
+    screening_price = details[0]["price"].to_i()
+    screening_capacity = details[0]["capacity"].to_i()
+    number_attending = details[0]["count"].to_i()
 
-    return if wallet < film_price
+    return if wallet < screening_price || number_attending >= screening_capacity
 
-    remove_cash(film_price)
+    remove_cash(screening_price)
     update()
     ticket = Ticket.new({
       "customer_id" => @id,
-      "film_id" => film_id
+      "screening_id" => screening_id
       })
     ticket.save()
   end

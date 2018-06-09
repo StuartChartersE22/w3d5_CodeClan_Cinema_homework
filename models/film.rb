@@ -89,7 +89,6 @@ class Film
     frequencies = SqlRunner.run(sql, values).to_a()
     most_popular = frequencies.max_by {|frequency| frequency["count"].to_i()}
     return Screening.new(most_popular)
-    # return Screening.new(most_frequent)
   end
 
 #Sql class methods
