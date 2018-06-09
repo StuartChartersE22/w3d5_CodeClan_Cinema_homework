@@ -90,6 +90,13 @@ class Ticket
     return results.map {|result| [Customer.new(result), result["price"].to_i()]}
   end
 
+  def self.find(id)
+    sql = "SELECT * FROM tickets WHERE tickets.id = $1"
+    values = [id]
+    details = SqlRunner.run(sql, values)
+    return self.map_tickets(details)
+  end
+
   # def self.cancel_screening(screening_id)
   #   pg_object_of_cus_id_and_price = self.ticket_prices_by_screening_for_customers(screening_id)
   #

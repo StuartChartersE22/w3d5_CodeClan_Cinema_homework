@@ -85,7 +85,7 @@ class Screening
     return self.map_screenings(screenings)
   end
 
-  def self.find_by_id(id)
+  def self.find(id)
     sql = "SELECT * FROM screenings WHERE id = $1"
     values = [id]
     screening = SqlRunner.run(sql, values)
