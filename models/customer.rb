@@ -84,6 +84,13 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
+  def force_delete()
+    sql = "DELETE FROM tickets WHERE tickets.customer_id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+    delete()
+  end
+
 #Sql class methods
   def self.map_customers(customers)
     return customers.map {|customer| Customer.new(customer)}
