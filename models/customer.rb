@@ -121,6 +121,13 @@ class Customer
     return self.map_customers(customers)
   end
 
+  # def self.refund_tickets(pg_object_customer_details_and_price)
+  #   sql = "UPDATE customers SET wallet = (wallet - $1.price)
+  #   WHERE customers.id IN $1"
+  #   values = [pg_object_customer_details_and_price]
+  #   SqlRunner.run(sql, values)
+  # end
+
   def self.refund_tickets(array_of_array_customer__price_paid)
     array_of_array_customer__price_paid.each do |entry|
       customer = entry[0]
