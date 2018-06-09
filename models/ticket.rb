@@ -101,7 +101,7 @@ class Ticket
     WHERE screening_id = $1"
     values = [screening_id]
     results = SqlRunner.run(sql, values)
-    return results.map {|result| {Customer.map_customers(result) => result["price"].to_i()}}
+    return results.map {|result| {Customer.new(result) => result["price"].to_i()}}
   end
 
 end
