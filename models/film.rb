@@ -52,11 +52,22 @@ class Film
     return SqlRunner.run(sql, values)[0]["count"].to_i()
   end
 
-  def cancel()
-    Screening.find_film_screenings(@id)
-    sql = "DELETE FROM films WHERE films.id = $1"
+  # def cancel()
+  #   Screening.find_film_screenings(@id)
+  #
+  #   sql = "DELETE FROM films WHERE films.id = $1"
+  #   values = [@id]
+  #   SqlRunner.run(sql, values)
+  # end
+
+  def find_all_tickets()
+    sql = "SELECT customers.* FROM screenings
+    INNER JOIN tickets ON tickets.screening_id = screenings.id
+    INNER JOIN customers ON tickets.customer_id = customers.id
+    WHERE screenings.film_id = $1"
     values = [@id]
-    SqlRunner.run(sql, values)
+    results = SqlRunner.run(sql, values)
+    return results.map {|result| [Customer.new(result), @price]}
   end
 
 #Sql class methods

@@ -79,6 +79,17 @@ class Ticket
     ticket_details = SqlRunner.run(sql, values)
   end
 
+  def self.ticket_prices_by_screening_for_customers(screening_id)
+    sql = "SELECT customers.*, films.price FROM films
+    INNER JOIN screenings ON screenings.film_id = films.id
+    INNER JOIN tickets ON tickets.screening_id = screenings.id
+    INNER JOIN customers ON tickets.customer_id = customers.id
+    WHERE screening_id = $1"
+    values = [screening_id]
+    results = SqlRunner.run(sql, values)
+    return results.map {|result| [Customer.new(result), result["price"].to_i()]}
+  end
+
   # def self.cancel_screening(screening_id)
   #   pg_object_of_cus_id_and_price = self.ticket_prices_by_screening_for_customers(screening_id)
   #
@@ -94,16 +105,5 @@ class Ticket
   #   values = [id_screening]
   #   SqlRunner.run(sql, values)
   # end
-
-  def self.ticket_prices_by_screening_for_customers(screening_id)
-    sql = "SELECT customers.*, films.price FROM films
-    INNER JOIN screenings ON screenings.film_id = films.id
-    INNER JOIN tickets ON tickets.screening_id = screenings.id
-    INNER JOIN customers ON tickets.customer_id = customers.id
-    WHERE screening_id = $1"
-    values = [screening_id]
-    results = SqlRunner.run(sql, values)
-    return results.map {|result| [Customer.new(result), result["price"].to_i()]}
-  end
 
 end

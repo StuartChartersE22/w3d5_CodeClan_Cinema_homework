@@ -60,7 +60,7 @@ class Screening
 
   def cancel()
     Ticket.refund_screening(@id)
-    
+
     sql = "DELETE FROM screenings
     WHERE screenings.id = $1"
     values = [@id]
@@ -94,8 +94,8 @@ class Screening
   def self.find_film_screenings(film_id)
     sql = "SELECT * FROM screenings WHERE film_id = $1"
     values = [film_id]
-    film_details = SqlRunner.run(sql, values)
-    return Film.map_films(film_details)
+    screening_details = SqlRunner.run(sql, values)
+    return Screening.map_screenings(screening_details)
   end
 
 end
