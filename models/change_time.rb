@@ -15,7 +15,7 @@ class TimeChange
 
     sec = time_as_array[2].to_i()
     minute = time_as_array[1].to_i()
-    hour = ((time_as_array[0].to_i() + hours)%24)
+    hour = (time_as_array[0].to_i() + hours)%24
 
     return "%02d:%02d:%02d" % [hour, minute, sec]
   end
