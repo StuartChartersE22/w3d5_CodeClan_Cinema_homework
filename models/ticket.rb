@@ -43,11 +43,13 @@ class Ticket
   end
 
   def cancel()
+    tickets = Ticket.ticket_prices_by_screening_for_customers(@screening_id)
+    Customer.refund_tickets(tickets)
+
     sql = "DELETE FROM tickets
     WHERE tickets.id = $1"
     values = [@id]
-    SqlRunner.run(sql, values)
-    Customer.refund_tickets([self])
+    results = SqlRunner.run(sql, values)
   end
 
 #SQL class methods
