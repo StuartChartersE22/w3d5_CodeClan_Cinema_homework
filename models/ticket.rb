@@ -77,4 +77,14 @@ class Ticket
     Customer.refund_tickets(tickets)
   end
 
+  def self.ticket_prices_by_screening(screening_id)
+    sql = "SELECT films.price FROM films
+    INNER JOIN screenings ON screenings.film_id = films.id
+    INNER JOIN tickets ON tickets.screening_id = screenings.id
+    WHERE screening_id = $1"
+    values = [screening_id]
+    results = SqlRunner.run(sql, values)
+    return results.map {|result| result["price"].to_i()}
+  end
+
 end

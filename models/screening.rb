@@ -63,7 +63,7 @@ class Screening
     sql = "DELETE FROM screenings
     WHERE screenings.id = $1"
     values = [@id]
-    SqlRunner.run(sql, values).values().flatten()
+    SqlRunner.run(sql, values)
   end
 
 #SQL class methods
@@ -83,11 +83,18 @@ class Screening
     return self.map_screenings(screenings)
   end
 
-  def self.find(id)
+  def self.find_by_id(id)
     sql = "SELECT * FROM screenings WHERE id = $1"
     values = [id]
     screening = SqlRunner.run(sql, values)
     return Screening.new(screening[0])
+  end
+
+  def self.find_film_screenings(film_id)
+    sql = "SELECT * FROM screenings WHERE film_id = $1"
+    values = [film_id]
+    film_details = SqlRunner.run(sql, values)
+    return Film.map_films(film_details)
   end
 
 end

@@ -58,12 +58,12 @@ class Customer
     return if wallet < film_price
 
     remove_cash(film_price)
+    update()
     ticket = Ticket.new({
       "customer_id" => @id,
       "film_id" => film_id
       })
     ticket.save()
-    update()
   end
 
   def number_of_tickets()
@@ -102,12 +102,15 @@ class Customer
     return Customer.new(customer[0])
   end
 
-  def self.refund_tickets(array_of_tickets)
-    array_of_tickets.each do |ticket|
-      customer = self.find(ticket.customer_id)
-      customer.remove_cash(-ticket.price())
-      customer.update()
-    end
-  end
+  # def self.refund_tickets(array_of_tickets)
+  #   array_of_tickets.each do |ticket|
+  #     customer = self.find(ticket.customer_id)
+  #     customer.remove_cash(-ticket.price())
+  #     customer.update()
+  #   end
+
+  # def self.refund_tickets(array_of_tickets)
+  #   sql = "UPDATE "
+  # end
 
 end
