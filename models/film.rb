@@ -82,7 +82,8 @@ class Film
   end
 
   def most_popular_screening()
-    sql = "SELECT screenings.*, COUNT(screenings.id) FROM screenings
+    sql = "SELECT screenings.*, COUNT(tickets.screening_id) FROM screenings
+    LEFT JOIN tickets ON tickets.screening_id = screenings.id
     WHERE screenings.film_id = $1 GROUP BY screenings.id"
     values = [@id]
     frequencies = SqlRunner.run(sql, values).to_a()
