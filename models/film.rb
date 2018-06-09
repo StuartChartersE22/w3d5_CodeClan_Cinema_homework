@@ -60,8 +60,8 @@ class Film
 
     sql = "DELETE FROM tickets
     WHERE tickets.id IN (SELECT tickets.id FROM tickets
-      INNER JOIN screenings ON screenings.id = tickets.screening_id
-      WHERE screenings.film_id = $1)"
+    INNER JOIN screenings ON screenings.id = tickets.screening_id
+    WHERE screenings.film_id = $1)"
     SqlRunner.run(sql, values)
 
     sql = "DELETE FROM screenings WHERE screenings.film_id = $1"
@@ -79,6 +79,15 @@ class Film
     values = [@id]
     results = SqlRunner.run(sql, values)
     return results.map {|result| [Customer.new(result), @price]}
+  end
+
+  def most_popular_screening()
+    sql = "SELECT screenings.*, COUNT(screenings.id) FROM screenings
+    WHERE screenings.film_id = $1 GROUP BY screenings.id"
+    values = [@id]
+    frequencies = SqlRunner.run(sql, values).to_a()
+    most_frequent = frequencies.max {|frequency| frequency["count"]}
+    return Screening.new(most_frequent)
   end
 
 #Sql class methods
