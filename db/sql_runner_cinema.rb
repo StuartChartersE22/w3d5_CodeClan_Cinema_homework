@@ -16,4 +16,17 @@ class SqlRunner
   return results
   end
 
+  def self.run_unsanitised(sql, values=[])
+    begin
+      db = PG.connect({
+        dbname: 'cinema',
+        host: 'localhost'
+        })
+      results = db.exec(sql, values)
+    ensure
+      db.close() if db != nil
+    end
+    return results
+  end
+
 end

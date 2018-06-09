@@ -67,24 +67,39 @@ class Ticket
     SqlRunner.run(sql)
   end
 
-  def self.cancel_showing(id_screening)
-    sql = "DELETE FROM tickets
-    WHERE screening_id = $1
-    RETURNING *"
-    values = [id_screening]
-    ticket_details = SqlRunner.run(sql, values)
-    tickets = self.map_tickets(ticket_details)
+  def self.cancel_screening(screening_id)
+    tickets = self.ticket_prices_by_screening_for_customers(screening_id)
     Customer.refund_tickets(tickets)
+
+    sql = "DELETE FROM tickets
+    WHERE screening_id = $1"
+    values = [screening_id]
+    ticket_details = SqlRunner.run(sql, values)
   end
 
-  def self.ticket_prices_by_screening(screening_id)
-    sql = "SELECT films.price FROM films
+  # def self.cancel_screening(screening_id)
+  #   pg_object_of_cus_id_and_price = self.ticket_prices_by_screening_for_customers(screening_id)
+  #
+  #   return if pg_object_of_cus_id_and_price.to_a().length() == 0
+  #
+  #   sql = "UPDATE customers SET wallet = (wallet - $1.price)
+  #   WHERE customers.id = $1.customer_id"
+  #   values = [pg_object_of_cus_id_and_price]
+  #   SqlRunner.run_unsanitised(sql, values)
+  #
+  #   sql = "DELETE FROM tickets
+  #     WHERE screening_id = $1"
+  #   values = [id_screening]
+  #   SqlRunner.run(sql, values)
+  # end
+
+  def self.ticket_prices_by_screening_for_customers(screening_id)
+    sql = "SELECT tickets.customer_id, films.price FROM films
     INNER JOIN screenings ON screenings.film_id = films.id
     INNER JOIN tickets ON tickets.screening_id = screenings.id
     WHERE screening_id = $1"
     values = [screening_id]
-    results = SqlRunner.run(sql, values)
-    return results.map {|result| result["price"].to_i()}
+    return results = SqlRunner.run(sql, values)
   end
 
 end

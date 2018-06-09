@@ -53,12 +53,12 @@ screening1 = Screening.new({
   })
 
 screening2 = Screening.new({
-  "film_id" => film1.id(),
+  "film_id" => film2.id(),
   "show_time" => "00:15"
   })
 
 screening3 = Screening.new({
-  "film_id" => film1.id(),
+  "film_id" => film3.id(),
   "show_time" => "13:00"
   })
 
