@@ -97,20 +97,4 @@ class Ticket
     return self.map_tickets(details)
   end
 
-  # def self.cancel_screening(screening_id)
-  #   pg_object_of_cus_id_and_price = self.ticket_prices_by_screening_for_customers(screening_id)
-  #
-  #   return if pg_object_of_cus_id_and_price.to_a().length() == 0
-  #
-  #   sql = "UPDATE customers SET wallet = (wallet - $1.price)
-  #   WHERE customers.id = $1.customer_id"
-  #   values = [pg_object_of_cus_id_and_price]
-  #   SqlRunner.run_unsanitised(sql, values)
-  #
-  #   sql = "DELETE FROM tickets
-  #     WHERE screening_id = $1"
-  #   values = [id_screening]
-  #   SqlRunner.run(sql, values)
-  # end
-
 end
