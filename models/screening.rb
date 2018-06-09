@@ -59,7 +59,8 @@ class Screening
   end
 
   def cancel()
-    Ticket.cancel_showing(@id)
+    Ticket.refund_screening(@id)
+    
     sql = "DELETE FROM screenings
     WHERE screenings.id = $1"
     values = [@id]

@@ -67,7 +67,7 @@ class Ticket
     SqlRunner.run(sql)
   end
 
-  def self.cancel_screening(screening_id)
+  def self.refund_screening(screening_id)
     tickets = self.ticket_prices_by_screening_for_customers(screening_id)
     Customer.refund_tickets(tickets)
 
