@@ -87,8 +87,9 @@ class Film
     WHERE screenings.film_id = $1 GROUP BY screenings.id"
     values = [@id]
     frequencies = SqlRunner.run(sql, values).to_a()
-    most_frequent = frequencies.max {|frequency| frequency["count"]}
-    return Screening.new(most_frequent)
+    most_popular = frequencies.max_by {|frequency| frequency["count"].to_i()}
+    return Screening.new(most_popular)
+    # return Screening.new(most_frequent)
   end
 
 #Sql class methods

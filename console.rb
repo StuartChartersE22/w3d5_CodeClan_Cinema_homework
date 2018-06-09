@@ -62,9 +62,27 @@ screening3 = Screening.new({
   "show_time" => "13:00"
   })
 
+screening4 = Screening.new({
+  "film_id" => film1.id(),
+  "show_time" => "06:00"
+  })
+
+screening5 = Screening.new({
+  "film_id" => film2.id(),
+  "show_time" => "11:00"
+  })
+
+screening6 = Screening.new({
+  "film_id" => film3.id(),
+  "show_time" => "10:00"
+  })
+
 screening1.save()
 screening2.save()
 screening3.save()
+screening4.save()
+screening5.save()
+screening6.save()
 
 ticket1 = Ticket.new({
   "customer_id" => customer1.id(),
@@ -81,9 +99,27 @@ ticket3 = Ticket.new({
   "screening_id" => screening2.id()
 })
 
+ticket4 = Ticket.new({
+  "customer_id" => customer1.id(),
+  "screening_id" => screening4.id()
+})
+
+ticket5 = Ticket.new({
+  "customer_id" => customer3.id(),
+  "screening_id" => screening1.id()
+})
+
+ticket6 = Ticket.new({
+  "customer_id" => customer1.id(),
+  "screening_id" => screening1.id()
+})
+
 ticket1.save()
 ticket2.save()
 ticket3.save()
+ticket4.save()
+ticket5.save()
+ticket6.save()
 
 binding.pry
 nil
